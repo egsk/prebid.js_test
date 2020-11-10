@@ -7,7 +7,7 @@
     <title>Document</title>
 </head>
 <body>
-<script src="prebid4.15.0.js"></script>
+<script src="prebid4.1.1.js"></script>
 <script>
     var PREBID_TIMEOUT = 1000;
     var adUnits = [
@@ -32,47 +32,64 @@
     pbjs.que = pbjs.que || [];
 </script>
 <script>
+
+    pbjs.setConfig({
+        s2sConfig: {
+            accountId: '1',
+            enabled: true,
+            bidders: ['between'],
+            timeout: 1000,
+            adapter: 'prebidServer',
+            endpoint: 'http://pbs.lc/openrtb2/auction',
+            syncEndpoint: 'http://pbs.lc/cookie_sync'
+        }
+    });
+    let sizes = [[240, 400]];
+    var PREBID_TIMEOUT = 10000;
+
+    var adUnits = [{
+        code: 'ad_slot',
+        sizes: sizes,
+        mediaTypes: {
+            banner: {
+                sizes: sizes,
+            }
+        },
+        bids: [
+            {
+                bidder: 'between',
+                params: {
+                    host: 'lbs-ru1.ads',
+                    s: '3979084',
+                    test: 1,
+                }
+            }
+        ]
+    }];
+
     pbjs.que.push(function () {
         pbjs.que.push(function () {
             pbjs.setConfig({
-                s2sConfig: [{
-                    enabled: true,
-                    accountId: '1',
-                    endpoint: 'localhost:8000/openrtb2/auction',
-                    bidders: ['between'],
-                    defaultVendor: 'between',
-                    timeout: 500,
-                    adapterOptions: {
-                        between: {key: 'value'}
-                    },
-                    syncUrlModifier: {
-                        'between': function (type, url, bidder) {
-                            const publisherId = '42939'
-                            url += `&bidder_id=${publisherId}`;
-
-                            return url
-                        }
-                    },
-                    userSync: {
-                        iframeEnabled: true
-                    }
-                }],
-            });
-            pbjs.addAdUnits(adUnits);
-            pbjs.requestBids({
-                bidsBackHandler: sendAdserverRequest
-            });
+                userSync: {
+                    iframeEnabled: true
+                }
+            })
+        });
+        pbjs.addAdUnits(adUnits);
+        pbjs.requestBids({
+            bidsBackHandler: sendAdserverRequest
         });
     });
+
 
     function sendAdserverRequest() {
         if (pbjs.adserverRequestSent) return;
         pbjs.adserverRequestSent = true;
-        var params = pbjs.getAdserverTargetingForAdUnitCode("ad_slot");
-        var iframe = document.getElementById("ad_slot");
+        var params = pbjs.getAdserverTargetingForAdUnitCode('ad_slot');
+        var iframe = document.getElementById('ad_slot');
         var iframeDoc = iframe.contentWindow.document;
-        if (params && params["hb_adid"]) {
-            pbjs.renderAd(iframeDoc, params["hb_adid"]);
+        if (params && params['hb_adid']) {
+            pbjs.renderAd(iframeDoc, params['hb_adid']);
         }
     }
 
@@ -80,7 +97,7 @@
         sendAdserverRequest();
     }, PREBID_TIMEOUT);
 </script>
-
+<iframe id="ad_slot"></iframe>
 Prebid.js testing page
 </body>
 </html>
