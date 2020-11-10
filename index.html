@@ -7,10 +7,82 @@
     <title>Document</title>
 </head>
 <body>
-<!--BETWEEN SSP CODE V3.0 START-->
-<div id='b_script_3979084'>
-    <script async src='//cache.betweendigital.com/sections/2/3979084.js'></script>
-</div><!--BETWEEN SSP END-->
+<script src="prebid4.15.0.js"></script>
+<script>
+    var PREBID_TIMEOUT = 1000;
+    var adUnits = [
+        {
+            code: "ad_slot",
+            mediaTypes: {
+                banner: {
+                    sizes: [[240, 400]]
+                }
+            },
+            bids: [
+                {
+                    bidder: "between",
+                    params: {
+                        s: 3979084,
+                    }
+                }
+            ]
+        }
+    ];
+    var pbjs = pbjs || {};
+    pbjs.que = pbjs.que || [];
+</script>
+<script>
+    pbjs.que.push(function () {
+        pbjs.que.push(function () {
+            pbjs.setConfig({
+                s2sConfig: [{
+                    enabled: true,
+                    accountId: '1',
+                    bidders: ['between'],
+                    defaultVendor: 'between',
+                    timeout: 500,
+                    adapterOptions: {
+                        between: {key: 'value'}
+                    },
+                    syncUrlModifier: {
+                        'between': function (type, url, bidder) {
+                            const publisherId = '00000123231231'
+                            url += `&ri=${publisherId}`;
+                            return url
+                        }
+                    },
+                    extPrebid: {
+                        aliases: {
+                            between: between
+                        }
+                    },
+                    userSync: {
+                        iframeEnabled: true
+                    }
+                }],
+            });
+            pbjs.addAdUnits(adUnits);
+            pbjs.requestBids({
+                bidsBackHandler: sendAdserverRequest
+            });
+        });
+    });
+
+    function sendAdserverRequest() {
+        if (pbjs.adserverRequestSent) return;
+        pbjs.adserverRequestSent = true;
+        var params = pbjs.getAdserverTargetingForAdUnitCode("ad_slot");
+        var iframe = document.getElementById("ad_slot");
+        var iframeDoc = iframe.contentWindow.document;
+        if (params && params["hb_adid"]) {
+            pbjs.renderAd(iframeDoc, params["hb_adid"]);
+        }
+    }
+
+    setTimeout(function () {
+        sendAdserverRequest();
+    }, PREBID_TIMEOUT);
+</script>
 
 Prebid.js testing page
 </body>
