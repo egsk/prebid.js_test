@@ -38,6 +38,7 @@
                 s2sConfig: [{
                     enabled: true,
                     accountId: '1',
+                    endpoint: 'localhost:8000/openrtb2/auction',
                     bidders: ['between'],
                     defaultVendor: 'between',
                     timeout: 500,
@@ -46,14 +47,10 @@
                     },
                     syncUrlModifier: {
                         'between': function (type, url, bidder) {
-                            const publisherId = '00000123231231'
-                            url += `&ri=${publisherId}`;
+                            const publisherId = '42939'
+                            url += `&bidder_id=${publisherId}`;
+
                             return url
-                        }
-                    },
-                    extPrebid: {
-                        aliases: {
-                            between: between
                         }
                     },
                     userSync: {
