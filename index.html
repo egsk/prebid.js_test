@@ -9,30 +9,6 @@
 <body>
 <script src="prebid4.1.1.js"></script>
 <script>
-    var PREBID_TIMEOUT = 1000;
-    var adUnits = [
-        {
-            code: "ad_slot",
-            mediaTypes: {
-                banner: {
-                    sizes: [[240, 400]]
-                }
-            },
-            bids: [
-                {
-                    bidder: "between",
-                    params: {
-                        s: 3979084,
-                    }
-                }
-            ]
-        }
-    ];
-    var pbjs = pbjs || {};
-    pbjs.que = pbjs.que || [];
-</script>
-<script>
-
     pbjs.setConfig({
         s2sConfig: {
             accountId: '1',
@@ -46,7 +22,6 @@
     });
     let sizes = [[240, 400]];
     var PREBID_TIMEOUT = 10000;
-
     var adUnits = [{
         code: 'ad_slot',
         sizes: sizes,
@@ -61,24 +36,14 @@
                 params: {
                     host: 'lbs-ru1.ads',
                     s: 'defaultSectionId',
-                    publisher_id: '34774',
+                    publisher_id: '42939',
                 }
             }
         ]
     }];
-
-    pbjs.que.push(function () {
-        pbjs.que.push(function () {
-            pbjs.setConfig({
-                userSync: {
-                    iframeEnabled: true
-                }
-            })
-        });
-        pbjs.addAdUnits(adUnits);
-        pbjs.requestBids({
-            bidsBackHandler: sendAdserverRequest
-        });
+    pbjs.addAdUnits(adUnits);
+    pbjs.requestBids({
+        bidsBackHandler: sendAdserverRequest
     });
 
 
