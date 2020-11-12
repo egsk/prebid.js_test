@@ -64,9 +64,7 @@
         console.log(params);
         var iframe = document.getElementById('ad_slot');
         var iframeDoc = iframe.contentWindow.document;
-        if (params && params['hb_adid']) {
-            pbjs.renderAd(iframeDoc, params['hb_adid']);
-        }
+        pbjs.renderAd(iframeDoc, 'between');
     }
 
     setTimeout(function () {
