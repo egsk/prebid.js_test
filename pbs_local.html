@@ -1,3 +1,4 @@
+
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -11,6 +12,7 @@
 <script>
     pbjs.setConfig({
         s2sConfig: {
+            accountId: '1',
             enabled: true,
             bidders: ['between'],
             timeout: 1000,
@@ -37,7 +39,7 @@
                     publisher_id: '42939',
                     tag_id: '3979084',
                     site_id: '609638',
-                    bid_floor: 0.000003,
+                    bid_floor: '0.000003',
                     bid_floor_cur: 'USD',
                 }
             }
@@ -64,7 +66,7 @@
         sendAdserverRequest();
     }, PREBID_TIMEOUT);
 </script>
-<iframe id="ad_slot" style="width: 240px; height: 400px"></iframe>
+<iframe id="ad_slot"></iframe>
 Prebid.js testing page
 </body>
 </html>
