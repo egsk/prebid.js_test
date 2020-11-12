@@ -22,7 +22,7 @@
             syncEndpoint: 'http://pbs.lc/cookie_sync',
             syncUrlModifier: {
                 'between': function(type, url, bidder) {
-                    url += encodeURI(`&bidder_id=${publisherId}`);
+                    url += encodeURIComponent(`&bidder_id=${publisherId}`);
                     return url
                 }
             },
