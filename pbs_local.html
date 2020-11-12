@@ -62,6 +62,7 @@
         if (pbjs.adserverRequestSent) return;
         pbjs.adserverRequestSent = true;
         var params = pbjs.getAdserverTargetingForAdUnitCode('ad_slot');
+        console.log(params);
         var iframe = document.getElementById('ad_slot');
         var iframeDoc = iframe.contentWindow.document;
         if (params && params['hb_adid']) {
