@@ -15,8 +15,8 @@
             bidders: ['between'],
             timeout: 1000,
             adapter: 'prebidServer',
-            endpoint: 'http://pbs.lc/openrtb2/auction',
-            syncEndpoint: 'http://pbs.lc/cookie_sync'
+            endpoint: 'https://pbs.egorskorokhodov.ru/openrtb2/auction',
+            syncEndpoint: 'https://pbs.egorskorokhodov.ru/cookie_sync'
         }
     });
     let sizes = [[240, 400]];
@@ -34,8 +34,11 @@
                 bidder: 'between',
                 params: {
                     host: 'lbs-ru1.ads',
-                    s: 'defaultSectionId',
                     publisher_id: '42939',
+                    tag_id: '3979084',
+                    site_id: '609638',
+                    bid_floor: 0.000003,
+                    bid_floor_cur: 'USD',
                 }
             }
         ]
@@ -61,7 +64,7 @@
         sendAdserverRequest();
     }, PREBID_TIMEOUT);
 </script>
-<iframe id="ad_slot"></iframe>
+<iframe id="ad_slot" style="width: 240px; height: 400px"></iframe>
 Prebid.js testing page
 </body>
 </html>
