@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible"/>
+    <title>Prebid Test</title>
+    <script src="prebid4.15.0.js"></script>
+    <script>
+        var PREBID_TIMEOUT = 1000;
+        var adUnits = [
+            {
+                code: "ad_slot",
+                mediaTypes: {
+                    banner: {
+                        sizes: [[240, 400]]
+                    }
+                },
+                bids: [
+                    {
+                        bidder: "between",
+                        params: {
+                            s: 3979084
+                        }
+                    }
+                ]
+            }
+        ];
+        var pbjs = pbjs || {};
+        pbjs.que = pbjs.que || [];
+    </script>
+    <script>
+        pbjs.que.push(function () {
+            pbjs.setConfig({
+                userSync: {
+                    iframeEnabled: true
+                }
+            });
+            pbjs.addAdUnits(adUnits);
+            pbjs.requestBids({
+                bidsBackHandler: sendAdserverRequest
+            });
+        });
+
+        function sendAdserverRequest() {
+            if (pbjs.adserverRequestSent) return;
+            pbjs.adserverRequestSent = true;
+            var params = pbjs.getAdserverTargetingForAdUnitCode("ad_slot");
+            var iframe = document.getElementById("ad_slot");
+            var iframeDoc = iframe.contentWindow.document;
+            if (params && params["hb_adid"]) {
+                pbjs.renderAd(iframeDoc, params["hb_adid"]);
+            }
+        }
+
+        setTimeout(function () {
+            sendAdserverRequest();
+        }, PREBID_TIMEOUT);
+    </script>
+</head>
+<body>
+<iframe id="ad_slot"></iframe>
+</body>
+</html>
