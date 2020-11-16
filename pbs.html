@@ -48,15 +48,17 @@
         bidsBackHandler: sendAdserverRequest
     });
     function sendAdserverRequest() {
-        if (pbjs.adserverRequestSent) return;
-        pbjs.adserverRequestSent = true;
-        var iframe = document.getElementById('ad_slot');
-        var iframeDoc = iframe.contentWindow.document;
-        var ads = pbjs.getHighestCpmBids();
-        if (!ads.length) {
+        if (pbjs.adserverRequestSent) {
             return;
         }
-        pbjs.renderAd(iframeDoc, ads[0].adId);
+        pbjs.adserverRequestSent = true;
+        var ads = pbjs.getHighestCpmBids();
+        if (!ads || !ads.length) {
+            return;
+        }
+        var iframe = document.getElementById('ad_slot');
+        var iframeDoc = iframe.contentWindow.document;
+        pbjs.renderAd(iframeDoc, ads.shift().adId);
     }
 
     setTimeout(function () {
