@@ -7,7 +7,7 @@
     <title>Document</title>
 </head>
 <body>
-<script src="prebid.js"></script>
+<script src="prebid4.15.0.js"></script>
 <script>
     var publisherId = 42939;
     pbjs.setConfig({
@@ -55,7 +55,6 @@
     pbjs.requestBids({
         bidsBackHandler: sendAdserverRequest
     });
-
     function sendAdserverRequest() {
         if (pbjs.adserverRequestSent) return;
         pbjs.adserverRequestSent = true;
@@ -65,7 +64,6 @@
         if (!ads.length) {
             return;
         }
-        console.log(ads);
         pbjs.renderAd(iframeDoc, ads[0].adId);
     }
 
