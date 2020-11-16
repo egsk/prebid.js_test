@@ -19,12 +19,6 @@
             adapter: 'prebidServer',
             endpoint: '//pbs.egorskorokhodov.ru/openrtb2/auction',
             syncEndpoint: '//pbs.egorskorokhodov.ru/cookie_sync',
-            syncUrlModifier: {
-                'between': function (type, url) {
-                    url += encodeURIComponent(`&bidder_id=${publisherId}`);
-                    return url
-                }
-            },
         }
     });
     let sizes = [[240, 400]];
@@ -43,8 +37,6 @@
                 params: {
                     host: 'lbs-ru1.ads',
                     publisher_id: publisherId.toString(),
-                    tag_id: '3979084',
-                    site_id: '609638',
                     bid_floor: '0.000003',
                     bid_floor_cur: 'USD',
                 }

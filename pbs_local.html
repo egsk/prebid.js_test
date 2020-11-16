@@ -19,12 +19,6 @@
             adapter: 'prebidServer',
             endpoint: 'http://pbs.lc/openrtb2/auction',
             syncEndpoint: 'http://pbs.lc/cookie_sync',
-            syncUrlModifier: {
-                'between': function (type, url) {
-                    url += encodeURIComponent(`&bidder_id=${publisherId}`);
-                    return url
-                }
-            },
         }
     });
     let sizes = [[240, 400]];
@@ -43,10 +37,7 @@
                 params: {
                     host: 'lbs-ru1.ads',
                     publisher_id: publisherId.toString(),
-                    tag_id: '3979084',
-                    site_id: '609638',
                     bid_floor: '0.000003',
-                    bid_floor_cur: 'USD',
                 }
             }
         ]
@@ -56,15 +47,17 @@
         bidsBackHandler: sendAdserverRequest
     });
     function sendAdserverRequest() {
-        if (pbjs.adserverRequestSent) return;
-        pbjs.adserverRequestSent = true;
-        var iframe = document.getElementById('ad_slot');
-        var iframeDoc = iframe.contentWindow.document;
-        var ads = pbjs.getHighestCpmBids();
-        if (!ads.length) {
+        if (pbjs.adserverRequestSent) {
             return;
         }
-        pbjs.renderAd(iframeDoc, ads[0].adId);
+        pbjs.adserverRequestSent = true;
+        var ads = pbjs.getHighestCpmBids();
+        if (!ads || !ads.length) {
+            return;
+        }
+        var iframe = document.getElementById('ad_slot');
+        var iframeDoc = iframe.contentWindow.document;
+        pbjs.renderAd(iframeDoc, ads.shift().adId);
     }
 
     setTimeout(function () {
