@@ -1,0 +1,43 @@
+{
+  "id": "6ebdb6a7-69d9-46be-8f9d-4fcc755bd412",
+  "seatbid": [
+    {
+      "bid": [
+        {
+          "id": "1",
+          "impid": "1",
+          "price": 0.0595528,
+          "adm": "<test>",
+          "adid": "165_435519000477",
+          "adomain": [
+            "reg.ru"
+          ],
+          "iurl": "http://googleads.g.doubleclick.net/dbm/ad?dbm_p=AKAmf-AZCkpf6XHZMl4J9vMlbBOAF_M6cRGpRvotBjXtIbyYKE-8yuM",
+          "cid": "10876",
+          "crid": "165_435519000477",
+          "cat": [
+            "IAB19-24"
+          ],
+          "ext": {
+            "prebid": {
+              "targeting": {
+                "hb_bidder": "between",
+                "hb_pb": "0.00"
+              },
+              "type": "banner"
+            },
+            "bidder": {}
+          }
+        }
+      ],
+      "seat": "between"
+    }
+  ],
+  "cur": "USD",
+  "ext": {
+    "responsetimemillis": {
+      "between": 266
+    },
+    "tmaxrequest": 1000
+  }
+}

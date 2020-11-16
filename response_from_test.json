@@ -1,0 +1,47 @@
+{
+  "id": "c7dcf14f",
+  "seatbid": [
+    {
+      "bid": [
+        {
+          "id": "8750901685062148",
+          "impid": "div-gpt-ad-1460505748561-0",
+          "price": 0.5,
+          "adm": "<test>",
+          "adid": "29681110",
+          "adomain": [
+            "appnexus.com"
+          ],
+          "iurl": "http://lax1-ib.adnxs.com/cr?id=2968111",
+          "cid": "958",
+          "crid": "2968111",
+          "dealid": "test-dealid",
+          "w": 300,
+          "h": 250,
+          "ext": {
+            "prebid": {
+              "type": "banner",
+              "event": {
+                "win": "http://wurl.org?id=333"
+              }
+            },
+            "bidder": {
+              "appnexus": {
+                "brand_id": 1,
+                "auction_id": 3,
+                "bidder_id": 2
+              }
+            }
+          }
+        }
+      ],
+      "seat": "appnexus"
+    }
+  ],
+  "cur": "EUR",
+  "ext": {
+    "responsetimemillis": {
+      "appnexus": 8
+    }
+  }
+}
