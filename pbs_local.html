@@ -1,4 +1,3 @@
-
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -21,7 +20,7 @@
             endpoint: 'http://pbs.lc/openrtb2/auction',
             syncEndpoint: 'http://pbs.lc/cookie_sync',
             syncUrlModifier: {
-                'between': function(type, url, bidder) {
+                'between': function (type, url) {
                     url += encodeURIComponent(`&bidder_id=${publisherId}`);
                     return url
                 }
@@ -41,7 +40,6 @@
         bids: [
             {
                 bidder: 'between',
-                bid_id: '1111',
                 params: {
                     host: 'lbs-ru1.ads',
                     publisher_id: publisherId.toString(),
@@ -61,18 +59,21 @@
     function sendAdserverRequest() {
         if (pbjs.adserverRequestSent) return;
         pbjs.adserverRequestSent = true;
-        var params = pbjs.getAdserverTargetingForAdUnitCode('ad_slot');
-        console.log(params);
         var iframe = document.getElementById('ad_slot');
         var iframeDoc = iframe.contentWindow.document;
-        pbjs.renderAd(iframeDoc, 'between');
+        var ads = pbjs.getHighestCpmBids();
+        if (!ads.length) {
+            return;
+        }
+        console.log(ads);
+        pbjs.renderAd(iframeDoc, ads[0].adId);
     }
 
     setTimeout(function () {
         sendAdserverRequest();
     }, PREBID_TIMEOUT);
 </script>
-<iframe id="ad_slot"></iframe>
+<iframe id="ad_slot" style="width: 240px; height: 400px"></iframe>
 Prebid.js testing page
 </body>
 </html>
