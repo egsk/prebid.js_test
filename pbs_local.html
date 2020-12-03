@@ -1,44 +1,123 @@
-<html lang="ru">
+
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/default.min.css">
+    <link rel="stylesheet" href="https://highlightjs.org/static/demo/styles/ocean.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js"></script>
+    <script src="prebid4.15.0.js"></script>
+    <title>Prebid-server example</title>
+    <script>
+        var publisherId = 42939;
+        pbjs.setConfig({
+            s2sConfig: {
+                accountId: '1',
+                enabled: true,
+                bidders: ['between'],
+                timeout: 1000,
+                adapter: 'prebidServer',
+                endpoint: 'http://pbs.lc/openrtb2/auction',
+                syncEndpoint: 'http://pbs.lc/cookie_sync',
+            }
+        });
+        let sizes = [[240, 400]];
+        var PREBID_TIMEOUT = 10000;
+        var adUnits = [{
+            code: 'ad_slot',
+            sizes: sizes,
+            mediaTypes: {
+                banner: {
+                    sizes: sizes,
+                }
+            },
+            bids: [
+                {
+                    bidder: 'between',
+                    params: {
+                        host: 'lbs-ru1.ads',
+                        publisher_id: publisherId.toString(),
+                        bid_floor: 0.3,
+                    }
+                }
+            ]
+        }];
+        pbjs.addAdUnits(adUnits);
+        pbjs.requestBids({
+            bidsBackHandler: sendAdserverRequest
+        });
+        function sendAdserverRequest() {
+            if (pbjs.adserverRequestSent) {
+                return;
+            }
+            pbjs.adserverRequestSent = true;
+            var ads = pbjs.getHighestCpmBids();
+            if (!ads || !ads.length) {
+                return;
+            }
+            var iframe = document.getElementById('ad_slot');
+            var iframeDoc = iframe.contentWindow.document;
+            pbjs.renderAd(iframeDoc, ads.shift().adId);
+        }
+
+        setTimeout(function () {
+            sendAdserverRequest();
+        }, PREBID_TIMEOUT);
+    </script>
 </head>
 <body>
-<script src="prebid4.15.0.js"></script>
-<script>
-    var publisherId = 42939;
+<h1 class="home"> <a href="https://cdn.betweendigital.com/prebid_instructions/index.html">Between Digital: prebid-server configuration example</a></h1>
+<p>This page is example by itself. You can explore source code, outgoing requests and prebid-server response.</p>
+<p>Iframe below is a valid ad unit rendered by prebid.js using prebid-server bidresponse</p>
+<iframe id="ad_slot"></iframe>
+<p>Documented source code example:</p>
+<pre>
+    <code class="language-html">
+&#x3C;!--
+Load prebid.js. Your build should contain prebid-server adapter.
+See https://docs.prebid.org/download.html
+Don&#x27;t forget to choose &#x22;Prebid Server&#x22; option.
+--&#x3E;
+&#x3C;script src=&#x22;$PATH/TO/PREBIDJS/prebid4.15.0.js&#x22;&#x3E;&#x3C;/script&#x3E;
+
+&#x3C;!--
+Prebid client side config
+--&#x3E;
+&#x3C;script&#x3E;
     pbjs.setConfig({
-        s2sConfig: {
-            accountId: '1',
+        s2sConfig: { // Enable Server-to-Server config
+            accountId: &#x27;1&#x27;,
             enabled: true,
-            bidders: ['between'],
+            bidders: [&#x27;between&#x27;], // Don&#x27;t forget to select between as bidder
             timeout: 1000,
-            adapter: 'prebidServer',
-            endpoint: 'http://pbs.lc/openrtb2/auction',
-            syncEndpoint: 'http://pbs.lc/cookie_sync',
+            adapter: &#x27;prebidServer&#x27;,
+            endpoint: &#x27;//$PREBID-SERVER-DOMAIN.com/openrtb2/auction&#x27;,
+            syncEndpoint: &#x27;//$PREBID-SERVER-DOMAIN.com/cookie_sync&#x27;,
         }
     });
-    let sizes = [[240, 400]];
-    var PREBID_TIMEOUT = 10000;
+    var publisherId = &#x27;$PUBLISHER_ID&#x27;; // Your ID from Between Exchange control panel, see https://cp.betweendigital.com/
+    var sizes = [[240, 400]]; // Available banner sizes
+    var PREBID_TIMEOUT = 1000; // Awaiting response time
     var adUnits = [{
-        code: 'ad_slot',
+        code: &#x27;ad_slot&#x27;,
         sizes: sizes,
         mediaTypes: {
-            banner: {
+            banner: { // Currently, BetweenSSP supports only banner mediaType through prebid-server
                 sizes: sizes,
             }
         },
         bids: [
             {
-                bidder: 'between',
-                params: {
-                    host: 'lbs-ru1.ads',
-                    publisher_id: publisherId.toString(),
-                    bid_floor: '0.000003',
-                }
+                bidder: &#x27;between&#x27;,
+                params: { // BetweenSSP-specific parameters
+                    host: &#x27;lbs-ru1.ads&#x27;, // Required. Between SSP host url prefix. Defines data center where requests will be sent.
+                                                   // Choose the closest one to the prebid-server you are using.
+                                                   // Options: &#x27;lbs-eu1.ads&#x27;, &#x27;lbs-ru1.ads&#x27;, &#x27;lbs-asia1.ads&#x27;, &#x27;lbs-us-east1.ads&#x27;
+                    publisher_id: publisherId.toString(), // Required
+                    bid_floor: 0.5, // Optional. Minimum price acceptable for a bid. 0.00001 by default
+                    bid_floor_cur: &#x27;USD&#x27;, // Optional. Bid floor currency, default &#x27;USD&#x27;. Options: &#x27;RUB&#x27;, &#x27;EUR&#x27;, &#x27;USD&#x27;
+
             }
         ]
     }];
@@ -51,11 +130,11 @@
             return;
         }
         pbjs.adserverRequestSent = true;
-        var ads = pbjs.getHighestCpmBids();
+        var ads = pbjs.getHighestCpmBids(); //Select most valuable bid. You can change this logic on your own
         if (!ads || !ads.length) {
             return;
         }
-        var iframe = document.getElementById('ad_slot');
+        var iframe = document.getElementById(&#x27;ad_slot&#x27;);
         var iframeDoc = iframe.contentWindow.document;
         pbjs.renderAd(iframeDoc, ads.shift().adId);
     }
@@ -63,8 +142,101 @@
     setTimeout(function () {
         sendAdserverRequest();
     }, PREBID_TIMEOUT);
+&#x3C;/script&#x3E;
+&#x3C;iframe id=&#x22;ad_slot&#x22;&#x3E;&#x3C;/iframe&#x3E;
+
+    </code>
+  </pre>
+
+<script type="text/javascript">
+    hljs.initHighlightingOnLoad();
 </script>
-<iframe id="ad_slot" style="width: 240px; height: 400px"></iframe>
-Prebid-Server testing page
+<style>
+    body {
+        color: white;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+        font-size: 1rem;
+        line-height: 1.5;
+        font-feature-settings: "kern";
+        text-rendering: optimizelegibility;
+        -webkit-font-smoothing: antialiased;
+        background: rgb(40, 42, 53);
+        max-width: 1100px;
+        padding: 0px 2rem;
+        margin: auto;
+    }
+
+    h1 {
+        text-align: center;
+    }
+
+    h2 {
+        font-size: 1.6rem;
+    }
+
+    h3 {
+        margin-top: 2rem;
+        font-size: 1.4rem;
+    }
+
+    a:visited {
+        color: white !important;
+    }
+
+    a {
+        color: white !important;
+        text-decoration: none;
+    }
+
+    blockquote {
+        padding: 5px 15px;
+        background: rgb(53, 55, 68);
+        border-left: 4px solid #ddd;
+        color: #eee;
+        margin: 0;
+    }
+
+    code.inline {
+        display: inline-block;
+        background: rgb(53, 55, 68);
+        padding: 0.01em 0.4em;
+        border-radius: 0.3em;
+    }
+
+    .wrapper {
+        display: flex;
+        justify-content: space-around;
+    }
+
+    .lang {
+        display: flex;
+        flex-direction: column;
+        width: 40%;
+    }
+
+    .card {
+        width: 100%;
+        height: 4rem;
+        border: 1px solid gray;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0.5rem 0;
+        transition: all 0.5s;
+        transform: translateZ(0);
+    }
+
+    .card:hover {
+        transform: scale(1.02);
+        transition: all 0.2s;
+    }
+
+    .description {
+        height: 13rem;
+    }
+
+</style>
 </body>
 </html>
+
